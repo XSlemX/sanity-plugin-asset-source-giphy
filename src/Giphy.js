@@ -106,7 +106,7 @@ const Giphy = ({onClose, onSelect}) => {
     }])
   }
 
-  if(hasApiKey) {
+  if(!hasApiKey) {
     return <NoApiKeyWarning/>
   }
 
