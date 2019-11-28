@@ -47,7 +47,7 @@
   ],
   "scripts": {
     "build": "babel src -d lib",
-    "build:watch": "nodemon --watch src/ --exec \"babel --root-mode upward src -d dist\"",
+    "build:watch": "nodemon --watch src/ --exec \"babel src -d lib\"",
     "prepare": "yarn build"
   }
 }

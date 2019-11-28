@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import styled from "styled-components"
 import Dialog from "part:@sanity/components/dialogs/fullscreen"
 import Input from "part:@sanity/components/textinputs/default"
+import FormField from "part:@sanity/components/formfields/default"
 import Spinner from "part:@sanity/components/loading/spinner"
 import config from "config:asset-source-giphy"
 import axios from "axios"
@@ -26,8 +27,9 @@ const Giphy = ({onClose, onSelect}) => {
 
 
   useEffect(() => {
-    setHasApiKey(!!config.api_key)
-  }, [])
+    setHasApiKey(!!config.apiKey)
+  }, [config])
+
   useEffect(() => {
     if (debounced && debounced.length >= 3) {
       setIsSearching(true)
@@ -114,10 +116,10 @@ const Giphy = ({onClose, onSelect}) => {
     <Dialog title={"Select image from Giphy"} onClose={onClose} isOpen>
       <InputContainer>
         <InputInner>
-          <label htmlFor={"searchInput"}>Enter phrase</label>
-          <Input id={"searchInput"} onChange={handleChange} value={searchTerm} isClearable
-                 onClear={() => setSearchTerm("")}/>
-
+          <FormField label={"Enter phrase"} labelFor={"searchInput"} description={"Result will come as you type"}>
+            <Input placeholder={"Type phrase here"} id={"searchInput"} onChange={handleChange} value={searchTerm} isClearable
+                   onClear={() => setSearchTerm("")}/>
+          </FormField>
         </InputInner>
         {isSearching && <Spinner inline/>}
 
