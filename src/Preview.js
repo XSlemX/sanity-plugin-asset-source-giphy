@@ -1,5 +1,8 @@
 import React, { useEffect, useRef, useState } from "react"
-import Button from "part:@sanity/components/buttons/dropdown"
+import Button from "part:@sanity/components/buttons/default"
+import ButtonGroup from "part:@sanity/components/buttons/button-group"
+import Card from "part:@sanity/components/previews/card"
+
 import styled, { keyframes } from "styled-components"
 
 const Preview = ({src, item, onClick, autoPlay = false}) => {
@@ -24,24 +27,26 @@ const Preview = ({src, item, onClick, autoPlay = false}) => {
   }
   return (
     <Container>
-      <Video ref={video} onMouseEnter={() => setPlay(true)}
-             onMouseLeave={() => setPlay(false)} src={src} autoPlay={autoPlay} loop/>
-      <Button kind={"simple"} onAction={({image}) => onClick(item, image)} items={[
-        {
-          title: "Save gif",
-          icon: () => `📹`,
-          image: "original"
-        },
-        {
-          title: "Save still",
-          icon: () => `📷`,
-          image: "original_still"
-        }
-      ]} renderItem={item => (
-        <div>
-          <item.icon/>
-          {item.title}</div>
-      )}>Select</Button>
+      <Card title={item.title} media={() => <Video ref={video} onMouseEnter={() => setPlay(true)}
+                                                   onMouseLeave={() => setPlay(false)} src={src} autoPlay={autoPlay}
+                                                   loop/>}
+            date={item.import_datetime} subtitle={`Rating: ${item.rating}`}
+            mediaDimensions={{
+              ...item.images.original,
+              fit: "clip"
+            }}>
+
+        <ButtonGroup>
+          <Button inverted onClick={() => onClick(item, "original")}>
+            Original
+          </Button>
+          <Button inverted color={"primary"} onClick={() => onClick(item, "original_still")}>
+            Still image
+          </Button>
+        </ButtonGroup>
+      </Card>
+
+
     </Container>
   )
 }
@@ -59,7 +64,7 @@ const Container = styled.div`
   display: flex;
     flex-flow: column wrap;
     max-width: 300px;
-    padding: 12px;
+    padding: 6px 0;
     animation: ${FadeIn} 1.2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
 
 `
