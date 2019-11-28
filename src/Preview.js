@@ -25,7 +25,7 @@ const Preview = ({src, item, onClick, autoPlay = false}) => {
   return (
     <Container>
       <Video ref={video} onMouseEnter={() => setPlay(true)}
-             onMouseLeave={() => setPlay(false)} className={styles.video} src={src} autoPlay={autoPlay} loop/>
+             onMouseLeave={() => setPlay(false)} src={src} autoPlay={autoPlay} loop/>
       <Button kind={"simple"} onAction={({image}) => onClick(item, image)} items={[
         {
           title: "Save gif",
