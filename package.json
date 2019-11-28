@@ -1,6 +1,6 @@
 {
   "name": "sanity-plugin-asset-source-giphy",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Get giphies in Sanity",
   "main": "lib/index.js",
   "license": "MIT",
