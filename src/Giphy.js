@@ -8,6 +8,7 @@ import axios from "axios"
 import useDebounce from "./useDebounce"
 import Preview from "./Preview"
 import Button from "part:@sanity/components/buttons/default"
+import NoApiKeyWarning from "./NoApiKeyWarning"
 
 const instance = axios.create({
   baseURL: "https://api.giphy.com/v1/gifs",
@@ -19,9 +20,14 @@ const Giphy = ({onClose, onSelect}) => {
   const [results, setResults] = useState([])
   const [isSearching, setIsSearching] = useState(false)
   const [text, setText] = useState("")
+  const [hasApiKey, setHasApiKey] = useState(false)
 
   const debounced = useDebounce(searchTerm, 500)
 
+
+  useEffect(() => {
+    setHasApiKey(!!config.api_key)
+  }, [])
   useEffect(() => {
     if (debounced && debounced.length >= 3) {
       setIsSearching(true)
@@ -98,6 +104,10 @@ const Giphy = ({onClose, onSelect}) => {
         creditLine: "By giphy.com"
       }
     }])
+  }
+
+  if(hasApiKey) {
+    return <NoApiKeyWarning/>
   }
 
   return (
