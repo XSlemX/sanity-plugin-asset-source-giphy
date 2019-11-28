@@ -100,7 +100,6 @@ const Giphy = ({onClose, onSelect}) => {
     }])
   }
 
-  console.log(config)
   return (
     <Dialog title={"Select image from Giphy"} onClose={onClose} isOpen>
       <InputContainer>
