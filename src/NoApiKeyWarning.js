@@ -1,9 +1,10 @@
 import React from "react"
+import Badge from "part:@sanity/components/badges/default"
 
 const NoApiKeyWarning = () => {
   return (
     <div>
-      <h2>Missing configuration</h2>
+      <Badge color={"warning"} inverted faded><strong>Missing configuration</strong></Badge>
       <p>You must first configure the plugin with your Giphy credentials</p>
       <p>
         Edit the <code>./config/asset-source-giphy.json</code> file in your Sanity Studio
