@@ -2,8 +2,9 @@
   "name": "sanity-plugin-asset-source-giphy",
   "version": "0.0.2",
   "description": "Get giphies in Sanity",
-  "main": "src/index.js",
+  "main": "lib/index.js",
   "license": "MIT",
+  "repository": "https://github.com/XSlemX/sanity-plugin-asset-source-giphy",
   "author": {
     "email": "espen.saeverud@gmail.com",
     "name": "Espen Th Sæverud",
