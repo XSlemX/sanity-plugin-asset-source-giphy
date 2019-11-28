@@ -1,0 +1,49 @@
+{
+  "name": "sanity-plugin-asset-source-giphy",
+  "version": "0.0.2",
+  "description": "Get giphies in Sanity",
+  "main": "src/index.js",
+  "license": "MIT",
+  "author": {
+    "email": "espen.saeverud@gmail.com",
+    "name": "Espen Th Sæverud",
+    "url": "https://github.com/XSlemX"
+  },
+  "dependencies": {
+    "@sanity/components": "^0.146.3",
+    "@sanity/core": "^0.146.0",
+    "@sanity/default-layout": "^0.146.3",
+    "@sanity/default-login": "^0.146.0",
+    "@sanity/desk-tool": "^0.146.3",
+    "axios": "^0.19.0",
+    "styled-components": "^4.4.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-external-helpers": "^7.2.0",
+    "@babel/plugin-proposal-class-properties": "^7.3.0",
+    "@babel/plugin-proposal-decorators": "^7.3.0",
+    "@babel/plugin-proposal-export-default-from": "^7.2.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/plugin-transform-runtime": "^7.2.0",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/preset-react": "^7.0.0",
+    "babel-plugin-react-css-modules": "^5.2.6"
+  },
+  "files": [
+    "lib",
+    "src",
+    "sanity.json",
+    "README.md"
+  ],
+  "keywords": [
+    "sanity",
+    "asset-source"
+  ],
+  "scripts": {
+    "build": "babel src -d lib",
+    "build:watch": "nodemon --watch src/ --exec \"babel --root-mode upward src -d dist\"",
+    "prepare": "yarn build"
+  }
+}
