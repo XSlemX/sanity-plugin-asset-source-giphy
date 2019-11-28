@@ -35,11 +35,15 @@
     "lib",
     "src",
     "sanity.json",
-    "README.md"
+    "README.md",
+    "config.dist.json"
   ],
   "keywords": [
     "sanity",
-    "asset-source"
+    "plugin",
+    "images",
+    "giphy",
+    "assets"
   ],
   "scripts": {
     "build": "babel src -d lib",
