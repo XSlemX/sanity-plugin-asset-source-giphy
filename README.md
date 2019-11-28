@@ -10,7 +10,7 @@ In your studio folder, run:
 sanity install asset-source-giphy
 ```
 
-Then create an app to get a valid [Giphy API key](https://developers.giphy.com/dashboard/?create=true) into ``./config/giphy/config.json``.
+Then create an app to get a valid [Giphy API key](https://developers.giphy.com/dashboard/?create=true) into ``./config/asset-source-giphy.json``.
 
 The config file has two props:
 
