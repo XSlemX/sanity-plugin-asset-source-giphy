@@ -28,7 +28,7 @@ yarn add sanity-plugin-asset-source-giphy
 
 Add it as a plugin in sanity.config.ts (or .js), with a valid [Giphy API key](https://developers.giphy.com/dashboard/?create=true):
 
-apiKey is required, meanwhile autoPlayAllowed is optional and defauls to false
+**apiKey** is required, meanwhile **autoPlayAllowed** is optional and defauls to false
 
 ```js
 import { giphyAssetSourcePlugin } from "sanity-plugin-asset-source-giphy";
