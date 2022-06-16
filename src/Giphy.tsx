@@ -19,8 +19,9 @@ import {
   Stack,
 } from "@sanity/ui";
 import { GiphyAssetSourceConfig } from ".";
-import { GiphyResult } from "./types";
+import { GiphyResult, ImageTypes } from "./types";
 import NoApiKeyWarning from "./NoApiKeyWarning";
+import { AssetSourceComponentProps } from "sanity";
 
 const instance = axios.create({
   baseURL: "https://api.giphy.com/v1/gifs",
@@ -31,12 +32,16 @@ const ratings = ["ALL", "G", "PG", "PG-13", "R"].map((r) => ({
   value: r.toLowerCase(),
 }));
 
+interface GiphySelectorProps
+  extends GiphyAssetSourceConfig,
+    AssetSourceComponentProps {}
+
 export default function Giphy({
   onClose,
   onSelect,
   apiKey,
-  autoPlayAllowed,
-}: GiphyAssetSourceConfig) {
+  autoPlayAllowed = false,
+}: GiphySelectorProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [rating, setRating] = useState(ratings[0]);
   const [results, setResults] = useState<GiphyResult[]>([]);
@@ -81,12 +86,12 @@ export default function Giphy({
       .then((response) => response.data)
       .then((data) => data.data);
   };
-  console.log();
+
   const handleSearch = () => {
     setIsSearching(true);
     setIsTrendingResult(false);
     search()
-      .then(setResults)
+      .then((data) => console.log(data))
       .then(() => {
         setText(`Showing result for ${debounced}`);
         setIsSearching(false);
@@ -101,8 +106,8 @@ export default function Giphy({
     setIsSearching(true);
     search("random", {}).then((result: GiphyResult) => {
       chooseItem(result, "original");
-      setIsSearching(false);
     });
+    setIsSearching(false);
   };
 
   const handleTrendingClick = () => {
@@ -120,7 +125,7 @@ export default function Giphy({
       });
   };
 
-  const chooseItem = (item: GiphyResult, image: string) => {
+  const chooseItem = (item: GiphyResult, image: ImageTypes) => {
     if (!item.images.hasOwnProperty(image)) {
       console.warn("No such image on this item", image);
       return;
@@ -129,21 +134,7 @@ export default function Giphy({
     onSelect([
       {
         kind: "url",
-        // @ts-ignore
         value: item.images[image].url,
-        // @ts-ignore
-        assetDocumentProps: {
-          originalFilename: item.title, // Use this filename when the asset is saved as a file by someone.
-          source: {
-            // The source this image is from
-            name: item.user.display_name,
-            // A string that uniquely idenitfies it within the source.
-            // In this example the URL is the closest thing we have as an actual ID.
-            id: item.id,
-          },
-          description: item.title,
-          creditLine: `By ${item.user.display_name}`,
-        },
       },
     ]);
   };
@@ -212,24 +203,26 @@ export default function Giphy({
         <Container width={100} padding={4}>
           <Stack space={4}>
             <Heading>{text}</Heading>
-            <Flex wrap={"wrap"} gap={5} justify="center">
+            <Flex justify="center">
               {isSearching ? (
                 <Spinner muted />
               ) : (
-                results
-                  .filter(
-                    (result) =>
-                      result.rating === rating.value || rating.value === "all"
-                  )
-                  .map((result, index: number) => (
-                    <Preview
-                      autoPlay={autoPlayAllowed}
-                      src={result.images.preview.mp4}
-                      item={result}
-                      onClick={chooseItem}
-                      key={index}
-                    />
-                  ))
+                <Flex wrap={"wrap"} gap={5}>
+                  {results
+                    .filter(
+                      (result) =>
+                        result.rating === rating.value || rating.value === "all"
+                    )
+                    .map((result, index: number) => (
+                      <Preview
+                        autoPlay={autoPlayAllowed}
+                        src={result.images.preview.mp4}
+                        item={result}
+                        onClick={chooseItem}
+                        key={index}
+                      />
+                    ))}
+                </Flex>
               )}
             </Flex>
           </Stack>

@@ -1,10 +1,10 @@
 import Giphy from "./Giphy";
 import Icon from "./Icon";
-import { createPlugin } from "sanity";
+import { AssetSourceComponentProps, createPlugin } from "sanity";
 
 export interface GiphyAssetSourceConfig {
   apiKey: string;
-  autoPlayAllowed: boolean;
+  autoPlayAllowed?: boolean;
 }
 
 export const giphyAssetSourcePlugin = createPlugin<GiphyAssetSourceConfig>(
@@ -19,8 +19,10 @@ export const giphyAssetSourcePlugin = createPlugin<GiphyAssetSourceConfig>(
               {
                 name: "giphy",
                 title: "Giphy",
-                component: function component() {
-                  return <Giphy {...config} />;
+                component: function component(
+                  props: AssetSourceComponentProps
+                ) {
+                  return <Giphy {...props} {...config} />;
                 },
                 icon: Icon,
               },

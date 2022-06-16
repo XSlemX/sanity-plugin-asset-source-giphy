@@ -13,12 +13,12 @@ import {
   Grid,
 } from "@sanity/ui";
 import styled from "styled-components";
-import { GiphyResult } from "./types";
+import { GiphyResult, ImageTypes } from "./types";
 
 interface PreviewProps {
   src: string;
   item: GiphyResult;
-  onClick: (item: GiphyResult, type: string) => void;
+  onClick: (item: GiphyResult, type: ImageTypes) => void;
   autoPlay?: boolean;
 }
 
@@ -34,7 +34,7 @@ export default function Preview({
   autoPlay = false,
 }: PreviewProps) {
   const video = useRef<HTMLVideoElement>(null);
-  const [k, keySet] = useState("original");
+  const [k, keySet] = useState<ImageTypes>("original");
   const [play, setPlay] = useState(false);
 
   useEffect(() => {
@@ -50,7 +50,7 @@ export default function Preview({
     }
   }, [play, autoPlay]);
 
-  const entries = Object.entries(item.images).map(([key, value]: any) => ({
+  const entries = Object.entries(item.images).map(([key, value]) => ({
     ...value,
     key,
     isStill: key.includes("still"),
@@ -74,6 +74,7 @@ export default function Preview({
   if (!src) {
     return null;
   }
+
   return (
     <Container>
       <Card padding={1} radius={1} shadow={1} tone="primary">
@@ -118,7 +119,7 @@ export default function Preview({
         loop
       />
       <Grid columns={2} width={"100%"}>
-        <Select onChange={(e) => keySet(e.currentTarget.value)}>
+        <Select onChange={(e) => keySet(e.currentTarget.value as ImageTypes)}>
           <optgroup label={"GIF"}>
             {entries
               .filter((image) => !image.isStill)
