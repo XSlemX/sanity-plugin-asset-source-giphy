@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, useState } from "react"
-import Button from "part:@sanity/components/buttons/default"
-import ButtonGroup from "part:@sanity/components/buttons/button-group"
-import Card from "part:@sanity/components/previews/card"
+import React, {useEffect, useRef, useState, useMemo} from "react"
+import styled, {keyframes} from "styled-components"
+import {Button, Inline, Card, Badge, Heading, Text, Box, Tooltip, Select, Avatar, Flex, Grid} from "@sanity/ui"
 
-import styled, { keyframes } from "styled-components"
+const formatImageLabel = name => `${name.substring(0, 1).toUpperCase()}${name.substring(1).replaceAll("_", " ")}`
 
 const Preview = ({src, item, onClick, autoPlay = false}) => {
   const video = useRef(null)
+  const [k, keySet] = useState("original")
   const [play, setPlay] = useState(false)
 
   useEffect(() => {
@@ -22,57 +22,110 @@ const Preview = ({src, item, onClick, autoPlay = false}) => {
     }
 
   }, [play, autoPlay])
+
+  const entries = Object.entries(item.images).map(([key, value]) => ({
+    ...value,
+    key,
+    isStill: key.includes("still")
+  }))
+
+    const tone = useMemo(() => {
+        console.log(item.rating);
+        switch (item.rating){
+                case "g":
+                    return "positive"
+                case "pg":
+                    return "primary"
+                case "pg-13":
+                    return "caution"
+                case "r":
+                    return "critical"
+                default:
+                    return "default"
+        }
+    }, [item])
+
   if (!src) {
     return null
   }
-  return (
+
+    return (
     <Container>
-      <Card title={item.title} media={() => <Video ref={video} onMouseEnter={() => setPlay(true)}
-                                                   onMouseLeave={() => setPlay(false)} src={src} autoPlay={autoPlay}
-                                                   loop/>}
-            date={item.import_datetime} subtitle={`Rating: ${item.rating}`}
-            mediaDimensions={{
-              ...item.images.original,
-              fit: "clip"
-            }}>
-
-        <ButtonGroup>
-          <Button inverted onClick={() => onClick(item, "original")}>
-            Original
-          </Button>
-          <Button inverted color={"primary"} onClick={() => onClick(item, "original_still")}>
-            Still image
-          </Button>
-        </ButtonGroup>
+      <Card
+            padding={1}
+            radius={1}
+            shadow={1}
+            tone="primary">
+        <Flex justify="space-between" align="center" space={1}>
+          {item.user ? (
+            <Avatar
+              alt={item.user.description}
+              color="magenta"
+              src={item.user.avatar_url}
+              size={1}
+            />): (<Avatar
+              alt={"n/a"}
+              color="red"
+              size={1}
+              title={"n/a"}
+          />)}
+          <Heading as="h3" size={1}>
+            <Tooltip
+              content={
+                <Box padding={2}>
+                  <Text muted size={1}>
+                    {item.title}
+                  </Text>
+                </Box>
+              }
+              fallbackPlacements={['right', 'left']}
+              placement="top"
+              portal
+            >
+      <span style={{display: 'inline-block'}}>
+        {item.title.substring(0, 20)}
+      </span>
+            </Tooltip>
+          </Heading>
+          <Badge tone={tone}>{item.rating}</Badge>
+        </Flex>
       </Card>
-
-
+      <Video ref={video} onMouseEnter={() => setPlay(true)}
+             onMouseLeave={() => setPlay(false)} src={src} autoPlay={autoPlay}
+             loop
+      />
+      <Grid columns={2} width={"100%"}>
+        <Select onChange={e => keySet(e.currentTarget.value)}>
+          <optgroup label={"GIF"}>
+            {entries.filter(image => !image.isStill).map(image => (
+              <option key={image.key} value={image.url}>{formatImageLabel(image.key)}</option>
+            ))}
+          </optgroup>
+          <optgroup label={"Still images"}>
+            {entries.filter(image => image.isStill).map(image => (
+              <option key={image.key} value={image.url}>{formatImageLabel(image.key)}</option>
+            ))}
+          </optgroup>
+        </Select>
+        <Button onClick={() => onClick(item, k)} mode="default" tone="positive"
+                text={`Select ${formatImageLabel(k)}`}/>
+      </Grid>
     </Container>
   )
 }
 
-const FadeIn = keyframes` 
-0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-`
-
 const Container = styled.div`
-  display: flex;
-    flex-flow: column wrap;
-    max-width: 300px;
-    padding: 6px 0;
-    animation: ${FadeIn} 1.2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
-
+  border-radius: 10px;
+  width: 300px;
+  background-color: blanchedalmond;
 `
+
+
 
 const Video = styled.video`
-    width: 300px;
-    height: 300px;
-    object-fit: cover;
+  width: 300px;
+  height: 200px;
+  object-fit: cover;
 `
 
 export default Preview

@@ -1,24 +1,31 @@
-import React, { useEffect, useState } from "react"
-import styled from "styled-components"
-import Dialog from "part:@sanity/components/dialogs/fullscreen"
-import Input from "part:@sanity/components/textinputs/default"
+import React, {useEffect, useState} from "react"
 import FormField from "part:@sanity/components/formfields/default"
 import FieldSet from "part:@sanity/components/fieldsets/default"
-import Spinner from "part:@sanity/components/loading/spinner"
-import Select from "part:@sanity/components/selects/default"
-import ButtonGroup from "part:@sanity/components/buttons/button-group"
 import config from "config:asset-source-giphy"
+import {
+  Dialog,
+  Button,
+  Card,
+  TextInput as Input,
+  Container,
+  Heading,
+  Select,
+  studioTheme,
+  Spinner,
+  ThemeProvider, Inline, Radio, Label, Stack, Flex
+} from '@sanity/ui'
 import axios from "axios"
 import useDebounce from "./useDebounce"
 import Preview from "./Preview"
-import Button from "part:@sanity/components/buttons/default"
 import NoApiKeyWarning from "./NoApiKeyWarning"
 
+
+//console
 const instance = axios.create({
   baseURL: "https://api.giphy.com/v1/gifs",
 })
 
-const ratings = ["G", "PG", "PG-13", "R"].map(r => ({title: r}))
+const ratings = ["G", "PG", "PG-13", "R"].map(r => ({title: r, value: r}))
 
 const Giphy = ({onClose, onSelect}) => {
 
@@ -76,7 +83,7 @@ const Giphy = ({onClose, onSelect}) => {
   }
 
   const handleChange = e => {
-    setSearchTerm(e.target.value)
+    setSearchTerm(e.currentTarget.value)
   }
 
   const handleRandomClick = () => {
@@ -130,49 +137,72 @@ const Giphy = ({onClose, onSelect}) => {
   }
 
   return (
-    <Dialog title={"Select image from Giphy"} onClose={onClose} isOpen>
-      {isSearching && <Spinner fullscreen/>}
+    <ThemeProvider theme={studioTheme}>
+      <Dialog width={200} header={"Giphy Image Source"} onClose={onClose} id={"giphy-dialog"} title={"Testing"}>
+        {isSearching && <Spinner fullscreen/>}
 
-      <FieldSet legend={"Input controls"} description={"This is a description"} isCollapsible columns={1}>
-        <FormField label={"Phrase"} labelFor={"searchInput"} description={"Result will come as you type"}>
+        <Card padding={4}>
+          <FieldSet columns={1}>
+            <FormField label={"Phrase"} labelFor={"searchInput"} description={"Result will come as you type"}>
 
-          <Input placeholder={"Type phrase here"} id={"searchInput"} onChange={handleChange} value={searchTerm}
-                 isClearable
-                 onClear={() => setSearchTerm("")}/>
+              <Input placeholder={"Type phrase here"} id={"searchInput"} onChange={handleChange} value={searchTerm}
+                     isClearable
+                     onClear={() => setSearchTerm("")}
+                     clearButton/>
 
-        </FormField>
+            </FormField>
 
-        <FormField label={"Rating"} labelFor={"ratingSelect"} description={"Choose what rating you would like"}>
-          <Select id={"ratingSelect"} items={ratings} onChange={setRating} value={rating} inline/>
-        </FormField>
-        <FormField>
-          <ButtonGroup>
-            <Button color={"primary"} inverted onClick={handleTrendingClick}>See trending</Button>
-            <Button color={"warning"} inverted onClick={handleRandomClick}>I feel lucky</Button>
-          </ButtonGroup>
-        </FormField>
-      </FieldSet>
-      <div>
-        <h3>{text}</h3>
-        <Grid>
-
-          {results.map(result => (
-            <Preview autoPlay={!!config.autoPlayAll} src={result.images.preview.mp4} item={result}
-                     onClick={chooseItem}/>
-
-          ))}
-        </Grid>
-      </div>
-    </Dialog>
+            <FormField label={"Rating"} labelFor={"ratingSelect"} description={"Choose what rating you would like"}>
+                <Inline space={3}>
+                  {ratings.map(r => (
+                    <Label size={3}>
+                      <Inline space={1}>
+                        {r.title}
+                        <Radio
+                          defaultChecked={r.value === rating.value }
+                          name="rating"
+                          onChange={e => setRating(e.currentTarget.value)}
+                          value={r.value}
+                        />
+                      </Inline>
+                    </Label>
+                  ))}
+                </Inline>
+            </FormField>
+            <FormField>
+              <Card>
+                <Inline space={[3, 3, 4]}>
+                  <Button
+                    fontSize={[2, 2, 3]}
+                    mode="ghost"
+                    padding={[3, 3, 4]}
+                    text="See trending"
+                    onClick={handleTrendingClick}
+                  />
+                  <Button
+                    fontSize={[2, 2, 3]}
+                    padding={[3, 3, 4]}
+                    text="I feel lucky"
+                    tone="primary"
+                    onClick={handleRandomClick}
+                  />
+                </Inline>
+              </Card>
+            </FormField>
+          </FieldSet>
+        </Card>
+        <Container width={100} padding={4}>
+          <Heading>{text}</Heading>
+          <Flex wrap={"wrap"}>
+            {results.map(result => (
+              <Preview autoPlay={!!config.autoPlayAll} src={result.images.preview.mp4} item={result}
+                       onClick={chooseItem}/>
+            ))}
+          </Flex>
+        </Container>
+      </Dialog>
+    </ThemeProvider>
   )
 }
-
-const Grid = styled.div`
-  display: flex;
-  flex-flow: row wrap;
-  align-content: flex-start;
-  justify-content: space-around;
-  width: 100%;
-`
 
 export default Giphy
