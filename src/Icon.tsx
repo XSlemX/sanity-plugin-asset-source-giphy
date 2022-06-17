@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * Couple of things to note:
  * - width and height is set to 1em
@@ -10,4 +8,4 @@ import React from 'react'
  **/
 export default () => (
   <img src="https://giphy.com/static/img/favicon.png" alt={"giphy logo"} />
-)
+);
