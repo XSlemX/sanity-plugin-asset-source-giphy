@@ -2,7 +2,6 @@
   "name": "sanity-plugin-asset-source-giphy",
   "version": "0.0.11",
   "description": "Get giphies in Sanity",
-  "main": "lib/index.js",
   "license": "MIT",
   "repository": "https://github.com/XSlemX/sanity-plugin-asset-source-giphy",
   "author": {
@@ -10,34 +9,37 @@
     "name": "Espen Th Sæverud",
     "url": "https://github.com/XSlemX"
   },
+  "contributors": [
+    {
+      "email": "rein@undheim.io",
+      "name": "Rein Undheim",
+      "url": "https://github.com/Gawdfrey"
+    }
+  ],
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "dependencies": {
-    "@sanity/components": "^0.146.3",
-    "@sanity/core": "^0.146.0",
-    "@sanity/default-layout": "^0.146.3",
-    "@sanity/default-login": "^0.146.0",
-    "@sanity/desk-tool": "^0.146.3",
-    "axios": "^0.19.0",
-    "styled-components": "^4.4.1"
+    "@sanity/incompatible-plugin": "^0.0.1-studio-v3.1",
+    "@sanity/ui": "^0.37.9",
+    "axios": "^0.27.2",
+    "react": "^18.2.0",
+    "sanity": "^3.0.0-dev-preview.7",
+    "styled-components": "^5.2.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.1.2",
-    "@babel/core": "^7.2.2",
-    "@babel/plugin-external-helpers": "^7.2.0",
-    "@babel/plugin-proposal-class-properties": "^7.3.0",
-    "@babel/plugin-proposal-decorators": "^7.3.0",
-    "@babel/plugin-proposal-export-default-from": "^7.2.0",
-    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
-    "@babel/plugin-transform-runtime": "^7.2.0",
-    "@babel/preset-env": "^7.3.1",
-    "@babel/preset-react": "^7.0.0"
+    "@semantic-release/changelog": "^6.0.1",
+    "@semantic-release/git": "^10.0.1",
+    "semantic-release": "^19.0.3",
+    "@parcel/packager-ts": "2.6.0",
+    "@parcel/transformer-typescript-types": "2.6.0",
+    "@sanity/plugin-kit": "^0.1.0-v3-studio.0",
+    "@types/react": "^18.0.12",
+    "@types/styled-components": "^5.1.25",
+    "eslint": "^8.17.0",
+    "parcel": "^2.6.0",
+    "typescript": ">=3.0.0"
   },
-  "files": [
-    "lib",
-    "src",
-    "sanity.json",
-    "README.md",
-    "config.dist.json"
-  ],
   "keywords": [
     "sanity",
     "plugin",
@@ -45,9 +47,27 @@
     "giphy",
     "assets"
   ],
+  "source": "./src/index.tsx",
+  "exports": {
+    ".": {
+      "require": "./lib/cjs/index.js",
+      "default": "./lib/esm/index.js"
+    }
+  },
+  "main": "./lib/cjs/index.js",
+  "module": "./lib/esm/index.js",
+  "types": "./lib/types/index.d.ts",
+  "files": [
+    "src",
+    "lib",
+    "v2-incompatible.js",
+    "sanity.json"
+  ],
   "scripts": {
-    "build": "babel src -d lib",
-    "build:watch": "nodemon --watch src/ --exec \"babel src -d lib\"",
-    "prepare": "yarn build"
+    "prebuild": "plugin-kit verify-package --silent",
+    "build": "parcel build --no-cache",
+    "watch": "parcel watch",
+    "link-watch": "plugin-kit link-watch",
+    "prepublishOnly": "npm run build"
   }
 }
