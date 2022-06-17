@@ -19,7 +19,7 @@ interface PreviewProps {
   src: string;
   item: GiphyResult;
   onClick: (item: GiphyResult, type: ImageTypes) => void;
-  autoPlay?: boolean;
+  shouldAutoPlayPreview?: boolean;
 }
 
 const formatImageLabel = (name: string) =>
@@ -31,14 +31,14 @@ export default function Preview({
   src,
   item,
   onClick,
-  autoPlay = false,
+  shouldAutoPlayPreview = false,
 }: PreviewProps) {
   const video = useRef<HTMLVideoElement>(null);
-  const [k, keySet] = useState<ImageTypes>("original");
+  const [k, keySet] = useState<ImageTypes>(ImageTypes.Original);
   const [play, setPlay] = useState(false);
 
   useEffect(() => {
-    if (autoPlay) {
+    if (shouldAutoPlayPreview) {
       return;
     }
     if (video.current) {
@@ -48,7 +48,7 @@ export default function Preview({
         video.current.pause();
       }
     }
-  }, [play, autoPlay]);
+  }, [play, shouldAutoPlayPreview]);
 
   const entries = Object.entries(item.images).map(([key, value]) => ({
     ...value,
@@ -115,7 +115,7 @@ export default function Preview({
         onMouseEnter={() => setPlay(true)}
         onMouseLeave={() => setPlay(false)}
         src={src}
-        autoPlay={autoPlay}
+        autoPlay={shouldAutoPlayPreview}
         loop
       />
       <Grid columns={2} width={"100%"}>

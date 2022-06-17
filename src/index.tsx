@@ -4,7 +4,7 @@ import { AssetSourceComponentProps, createPlugin } from "sanity";
 
 export interface GiphyAssetSourceConfig {
   apiKey: string;
-  autoPlayAllowed?: boolean;
+  shouldAutoPlayPreview?: boolean;
 }
 
 export const giphyAssetSourcePlugin = createPlugin<GiphyAssetSourceConfig>(

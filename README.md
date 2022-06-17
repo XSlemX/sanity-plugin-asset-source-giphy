@@ -38,7 +38,7 @@ export default createConfig({
   plugins: [
     giphyAssetSourcePlugin({
       apiKey: "my-api-key",
-      autoPlayAllowed: false,
+      shouldAutoPlayPreview: false,
     }),
   ],
 });

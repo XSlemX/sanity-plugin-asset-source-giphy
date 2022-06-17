@@ -18,7 +18,8 @@
     "sourceMap": false,
     "inlineSourceMap": false,
     "downlevelIteration": true,
-    "declaration": true
+    "declaration": true,
+    "noImplicitAny": true
   },
   "include": ["./src"]
 }

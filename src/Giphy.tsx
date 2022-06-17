@@ -40,7 +40,7 @@ export default function Giphy({
   onClose,
   onSelect,
   apiKey,
-  autoPlayAllowed = false,
+  shouldAutoPlayPreview = false,
 }: GiphySelectorProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [rating, setRating] = useState(ratings[0]);
@@ -91,7 +91,7 @@ export default function Giphy({
     setIsSearching(true);
     setIsTrendingResult(false);
     search()
-      .then((data) => console.log(data))
+      .then(setResults)
       .then(() => {
         setText(`Showing result for ${debounced}`);
         setIsSearching(false);
@@ -105,7 +105,7 @@ export default function Giphy({
   const handleRandomClick = () => {
     setIsSearching(true);
     search("random", {}).then((result: GiphyResult) => {
-      chooseItem(result, "original");
+      chooseItem(result, ImageTypes.Original);
     });
     setIsSearching(false);
   };
@@ -212,8 +212,8 @@ export default function Giphy({
                     .filter((result) => result.rating === rating.value)
                     .map((result, index: number) => (
                       <Preview
-                        autoPlay={autoPlayAllowed}
-                        src={result.images.preview.mp4}
+                        shouldAutoPlayPreview={shouldAutoPlayPreview}
+                        src={result.images.preview.mp4!}
                         item={result}
                         onClick={chooseItem}
                         key={index}

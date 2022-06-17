@@ -1,3 +1,7 @@
+type GiphyImageItem = {
+  url: string;
+  mp4?: string;
+};
 export interface GiphyResult {
   type: string;
   id: string;
@@ -16,170 +20,7 @@ export interface GiphyResult {
   is_sticker: number;
   import_datetime: string;
   trending_datetime: string;
-  images: {
-    original: {
-      height: string;
-      width: string;
-      size: string;
-      url: string;
-      mp4_size: string;
-      mp4: string;
-      webp_size: string;
-      webp: string;
-      frames: string;
-      hash: string;
-    };
-    downsized: {
-      height: string;
-      width: string;
-      size: string;
-      url: string;
-    };
-    downsized_large: {
-      height: string;
-      width: string;
-      size: string;
-      url: string;
-    };
-    downsized_medium: {
-      height: string;
-      width: string;
-      size: string;
-      url: string;
-    };
-    downsized_small: {
-      height: string;
-      width: string;
-      mp4_size: string;
-      mp4: string;
-    };
-    downsized_still: {
-      height: string;
-      width: string;
-      size: string;
-      url: string;
-    };
-    fixed_height: {
-      height: string;
-      width: string;
-      size: string;
-      url: string;
-      mp4_size: string;
-      mp4: string;
-      webp_size: string;
-      webp: string;
-    };
-    fixed_height_downsampled: {
-      height: string;
-      width: string;
-      size: string;
-      url: string;
-      webp_size: string;
-      webp: string;
-    };
-    fixed_height_small: {
-      height: string;
-      width: string;
-      size: string;
-      url: string;
-      mp4_size: string;
-      mp4: string;
-      webp_size: string;
-      webp: string;
-    };
-    fixed_height_small_still: {
-      height: string;
-      width: string;
-      size: string;
-      url: string;
-    };
-    fixed_height_still: {
-      height: string;
-      width: string;
-      size: string;
-      url: string;
-    };
-    fixed_width: {
-      height: string;
-      width: string;
-      size: string;
-      url: string;
-      mp4_size: string;
-      mp4: string;
-      webp_size: string;
-      webp: string;
-    };
-    fixed_width_downsampled: {
-      height: string;
-      width: string;
-      size: string;
-      url: string;
-      webp_size: string;
-      webp: string;
-    };
-    fixed_width_small: {
-      height: string;
-      width: string;
-      size: string;
-      url: string;
-      mp4_size: string;
-      mp4: string;
-      webp_size: string;
-      webp: string;
-    };
-    fixed_width_small_still: {
-      height: string;
-      width: string;
-      size: string;
-      url: string;
-    };
-    fixed_width_still: {
-      height: string;
-      width: string;
-      size: string;
-      url: string;
-    };
-    looping: {
-      mp4_size: string;
-      mp4: string;
-    };
-    original_still: {
-      height: string;
-      width: string;
-      size: string;
-      url: string;
-    };
-    original_mp4: {
-      height: string;
-      width: string;
-      size: string;
-      url: string;
-    };
-    preview: {
-      height: string;
-      width: string;
-      mp4: string;
-      mp4_size: string;
-    };
-    preview_gif: {
-      height: string;
-      width: string;
-      size: string;
-      url: string;
-    };
-    preview_webp: {
-      height: string;
-      width: string;
-      size: string;
-      url: string;
-    };
-    "480w_still": {
-      height: string;
-      width: string;
-      size: string;
-      url: string;
-    };
-  };
+  images: Record<ImageTypes, GiphyImageItem>;
   user: {
     avatar_url: string;
     banner_image: string;
@@ -206,28 +47,26 @@ export interface GiphyResult {
   };
 }
 
-export type ImageTypes =
-  | "480w_still"
-  | "original_mp4"
-  | "original_still"
-  | "original"
-  | "preview"
-  | "preview_gif"
-  | "preview_webp"
-  | "downsized"
-  | "downsized_large"
-  | "downsized_medium"
-  | "downsized_small"
-  | "downsized_still"
-  | "fixed_height"
-  | "fixed_height_downsampled"
-  | "fixed_height_small"
-  | "fixed_height_small_still"
-  | "fixed_height_still"
-  | "fixed_width"
-  | "fixed_width_downsampled"
-  | "fixed_width_small"
-  | "fixed_width_small_still"
-  | "fixed_width_still"
-  | "looping"
-  | "original_still";
+export enum ImageTypes {
+  FourEightyStill = "480w_still",
+  OriginalMp4 = "original_mp4",
+  OriginialStill = "original_still",
+  Original = "original",
+  Preview = "preview",
+  PreviewGif = "preview_gif",
+  PreviewWebp = "preview_webp",
+  Downsized = "downsized",
+  DownsizedLarge = "downsized_large",
+  DownsizedMedium = "downsized_medium",
+  DownsizedStill = "downsized_still",
+  FixedHeight = "fixed_height",
+  FixedHeightDownsampled = "fixed_height_downsampled",
+  FixedHeightSmall = "fixed_height_small",
+  FixedHeightSmallStill = "fixed_height_small_still",
+  FixedHeightStill = "fixed_height_still",
+  FixedWidth = "fixed_width",
+  FixedWidthDownsampled = "fixed_width_downsampled",
+  FixedWidthSmall = "fixed_width_small",
+  FixedWidthSmallStill = "fixed_width_small_still",
+  FixedWidthStill = "fixed_width_still",
+}
