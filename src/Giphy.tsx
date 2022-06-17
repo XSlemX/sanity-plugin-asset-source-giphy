@@ -32,9 +32,7 @@ const ratings = ["G", "PG", "PG-13", "R"].map((r) => ({
   value: r.toLowerCase(),
 }));
 
-interface GiphySelectorProps
-  extends GiphyAssetSourceConfig,
-    AssetSourceComponentProps {}
+type GiphySelectorProps = GiphyAssetSourceConfig & AssetSourceComponentProps;
 
 export default function Giphy({
   onClose,
