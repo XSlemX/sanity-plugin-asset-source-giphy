@@ -27,7 +27,7 @@ const instance = axios.create({
   baseURL: "https://api.giphy.com/v1/gifs",
 });
 
-const ratings = ["ALL", "G", "PG", "PG-13", "R"].map((r) => ({
+const ratings = ["G", "PG", "PG-13", "R"].map((r) => ({
   title: r,
   value: r.toLowerCase(),
 }));
@@ -79,7 +79,7 @@ export default function Giphy({
           q: debounced,
           api_key: apiKey,
           limit: 24,
-          rating: rating.value === "all" ? "" : rating.value,
+          rating: rating.value,
           ...params,
         },
       })
@@ -209,10 +209,7 @@ export default function Giphy({
               ) : (
                 <Flex wrap={"wrap"} gap={5}>
                   {results
-                    .filter(
-                      (result) =>
-                        result.rating === rating.value || rating.value === "all"
-                    )
+                    .filter((result) => result.rating === rating.value)
                     .map((result, index: number) => (
                       <Preview
                         autoPlay={autoPlayAllowed}
