@@ -70,3 +70,9 @@ export enum ImageTypes {
   FixedWidthSmallStill = "fixed_width_small_still",
   FixedWidthStill = "fixed_width_still",
 }
+
+export enum SearchTypes {
+  Search = "search",
+  Trending = "trending",
+  Random = "random",
+}

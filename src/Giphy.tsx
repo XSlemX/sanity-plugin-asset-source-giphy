@@ -1,31 +1,33 @@
-import React, { useEffect, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import axios from "axios";
-import useDebounce from "./useDebounce";
 import Preview from "./Preview";
 import {
-  Dialog,
   Button,
   Card,
-  TextInput as Input,
   Container,
-  Heading,
-  studioTheme,
-  Spinner,
-  ThemeProvider,
-  Inline,
-  Radio,
-  Label,
+  Dialog,
   Flex,
+  Heading,
+  Inline,
+  Label,
+  Radio,
+  Spinner,
   Stack,
+  studioTheme,
+  TextInput,
+  ThemeProvider,
 } from "@sanity/ui";
 import { GiphyAssetSourceConfig } from ".";
-import { GiphyResult, ImageTypes } from "./types";
+import { GiphyResult, ImageTypes, SearchTypes } from "./types";
 import NoApiKeyWarning from "./NoApiKeyWarning";
 import { AssetSourceComponentProps } from "sanity";
+import { useQuery } from "react-query";
 
 const instance = axios.create({
   baseURL: "https://api.giphy.com/v1/gifs",
 });
+
+instance.interceptors.response.use((response) => response.data);
 
 const ratings = ["G", "PG", "PG-13", "R"].map((r) => ({
   title: r,
@@ -42,88 +44,71 @@ export default function Giphy({
 }: GiphySelectorProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [rating, setRating] = useState(ratings[0]);
-  const [results, setResults] = useState<GiphyResult[]>([]);
-  const [isSearching, setIsSearching] = useState(false);
-  const [text, setText] = useState("");
-  const [hasApiKey, setHasApiKey] = useState(false);
-  const [isTrendingResult, setIsTrendingResult] = useState(true);
+  const input = useRef<HTMLInputElement>(null);
+  const [searchType, setSearchType] = useState<SearchTypes>(
+    SearchTypes.Trending
+  );
 
-  const debounced = useDebounce(searchTerm, 500);
-
-  useEffect(() => {
-    setHasApiKey(!!apiKey);
-  }, [apiKey]);
-
-  useEffect(() => {
-    if (debounced && debounced.length >= 3) {
-      handleSearch();
-    } else {
-      setResults([]);
-    }
-  }, [debounced]);
-
-  useEffect(() => {
-    if (isTrendingResult) {
-      handleTrendingClick();
-    } else {
-      handleSearch();
-    }
-  }, [rating]);
-
-  const search = (searchType: string = "search", params: any = {}) => {
-    return instance
-      .get(`/${searchType}`, {
+  const search = (
+    term: string,
+    type: SearchTypes,
+    rating: string = "g",
+    limit: number = 24
+  ) =>
+    instance
+      .get(`/${type}`, {
         params: {
-          q: debounced,
+          ...(type === SearchTypes.Search && { q: searchTerm }),
           api_key: apiKey,
-          limit: 24,
-          rating: rating.value,
-          ...params,
+          limit,
+          rating,
         },
       })
-      .then((response) => response.data)
       .then((data) => data.data);
-  };
 
-  const handleSearch = () => {
-    setIsSearching(true);
-    setIsTrendingResult(false);
-    search()
-      .then(setResults)
-      .then(() => {
-        setText(`Showing result for ${debounced}`);
-        setIsSearching(false);
-      });
-  };
+  const { data, error, isLoading } = useQuery<GiphyResult[]>(
+    ["giphy", searchTerm, searchType, rating.value],
+    () => search(searchTerm, searchType, rating.value),
+    {
+      enabled:
+        !!apiKey &&
+        searchType !== SearchTypes.Random && // handled manually
+        ((searchType === SearchTypes.Search && !!searchTerm) ||
+          searchType === SearchTypes.Trending),
+    }
+  );
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.currentTarget.value);
+  const text = useMemo(() => {
+    if (!data && !error) {
+      return "Type to search for GIFs";
+    }
+    if (searchType === SearchTypes.Search) {
+      return `${
+        isLoading ? "Searching" : "Showing results"
+      } for "${searchTerm}"`;
+    }
+
+    return `${isLoading ? "Searching" : "Showing results"} for ${searchType}`;
+  }, [searchType, searchTerm, isLoading]);
+
+  const handleClick = () => {
+    setSearchType(SearchTypes.Search);
+    setSearchTerm(input?.current?.value!);
   };
 
   const handleRandomClick = () => {
-    setIsSearching(true);
-    search("random", {}).then((result: GiphyResult) => {
-      chooseItem(result, ImageTypes.Original);
-    });
-    setIsSearching(false);
+    search("", SearchTypes.Random, rating.value).then(chooseItem);
   };
 
   const handleTrendingClick = () => {
-    setIsTrendingResult(true);
-    setIsSearching(true);
-    setSearchTerm("");
-    search("trending")
-      .then((results: GiphyResult[]) => {
-        setText("Showing result for Trending");
-        setResults(results);
-        return results;
-      })
-      .then(() => {
-        setIsSearching(false);
-      });
+    setSearchType(SearchTypes.Trending);
   };
 
-  const chooseItem = (item: GiphyResult, image: ImageTypes) => {
+  const chooseItem = (
+    item: GiphyResult,
+    image: ImageTypes = ImageTypes.Original
+  ) => {
+    console.log("Choosing", item);
     if (!item.images.hasOwnProperty(image)) {
       console.warn("No such image on this item", image);
       return;
@@ -137,8 +122,12 @@ export default function Giphy({
     ]);
   };
 
-  if (!hasApiKey) {
+  if (!apiKey) {
     return <NoApiKeyWarning />;
+  }
+
+  function handleSubmit() {
+    handleClick();
   }
 
   return (
@@ -152,14 +141,29 @@ export default function Giphy({
       >
         <Card padding={4}>
           <Stack space={4}>
-            <Input
-              placeholder={"Type phrase here"}
-              id={"searchInput"}
-              onChange={handleChange}
-              value={searchTerm}
-              onClear={() => setSearchTerm("")}
-              clearButton
-            />
+            <form onSubmit={handleClick}>
+              <Flex>
+                <Card flex={1}>
+                  <TextInput
+                    ref={input}
+                    width={"100%"}
+                    placeholder={"Type phrase here"}
+                    id={"searchInput"}
+                    onClear={handleTrendingClick}
+                    fontSize={[2, 2, 3]}
+                    padding={[3, 3, 4]}
+                    clearButton
+                  />
+                </Card>
+                <Button
+                  fontSize={[2, 2, 3]}
+                  padding={[3, 3, 4]}
+                  text="Search"
+                  tone="primary"
+                  onClick={handleClick}
+                />
+              </Flex>
+            </form>
             <Inline space={3}>
               {ratings.map((r) => (
                 <Label size={3}>
@@ -202,21 +206,19 @@ export default function Giphy({
           <Stack space={4}>
             <Heading>{text}</Heading>
             <Flex justify="center">
-              {isSearching ? (
+              {isLoading ? (
                 <Spinner muted />
               ) : (
                 <Flex wrap={"wrap"} gap={5}>
-                  {results
-                    .filter((result) => result.rating === rating.value)
-                    .map((result, index: number) => (
-                      <Preview
-                        shouldAutoPlayPreview={shouldAutoPlayPreview}
-                        src={result.images.preview.mp4!}
-                        item={result}
-                        onClick={chooseItem}
-                        key={index}
-                      />
-                    ))}
+                  {data?.map((result) => (
+                    <Preview
+                      shouldAutoPlayPreview={shouldAutoPlayPreview}
+                      src={result.images.preview.mp4!}
+                      item={result}
+                      onClick={chooseItem}
+                      key={result.title}
+                    />
+                  ))}
                 </Flex>
               )}
             </Flex>
