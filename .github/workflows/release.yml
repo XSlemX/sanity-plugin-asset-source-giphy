@@ -22,7 +22,7 @@ jobs:
         with:
           node-version: 'lts/*'
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --legacy-peer-deps
       - name: Get branch name
         id: branch-name
         uses: tj-actions/branch-names@v5.2
