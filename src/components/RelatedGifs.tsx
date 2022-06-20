@@ -2,7 +2,7 @@ import React from "react";
 import { useQuery } from "react-query";
 import { RelatedGif } from "../types";
 import { getRelatedGifs } from "../lib/giphyClient";
-import { Container, Heading, Spinner, Stack } from "@sanity/ui";
+import { Flex, Heading, Spinner } from "@sanity/ui";
 import GifGrid from "./GifGrid";
 import { useGiphyContext } from "../context/GiphyProvider";
 
@@ -23,10 +23,10 @@ const RelatedGifs = ({}: RelatedGifsProps) => {
   }
 
   return (
-    <Stack>
+    <Flex direction={"column"} gap={5}>
       <Heading type={"h3"}>Related Gifs</Heading>
       <GifGrid items={data!} onItemClick={handleGifClick} />
-    </Stack>
+    </Flex>
   );
 };
 

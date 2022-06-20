@@ -19,6 +19,7 @@ type GiphyContextProps = {
   handleTrendingClick: () => void;
   handleRatingChange: (rating: GiphyRating) => void;
   handleGifClick: (gifId: string) => void;
+  handleSelect: (item: GiphyResult, image: ImageTypes) => void;
   shouldAutoPlayPreview: boolean;
 };
 
@@ -33,6 +34,7 @@ const Context = createContext<GiphyContextProps>({
   handleRandomClick: () => {},
   handleRatingChange: (rating: GiphyRating) => {},
   handleTrendingClick: () => {},
+  handleSelect: () => {},
 });
 
 type GiphyProviderProps = {
@@ -95,7 +97,7 @@ const GiphyProvider = ({
     item: GiphyResult,
     image: ImageTypes = ImageTypes.Original
   ) => {
-    console.log("Choosing", item);
+    console.log("Choosing", item, image);
     if (!(image in item.images)) {
       console.warn("No such image on this item", image);
       return;
@@ -125,6 +127,7 @@ const GiphyProvider = ({
         error,
         isLoading,
         shouldAutoPlayPreview,
+        handleSelect,
       }}
     >
       {children}

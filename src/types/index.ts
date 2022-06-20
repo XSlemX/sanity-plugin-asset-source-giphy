@@ -2,6 +2,7 @@ export type GiphyImageItem = {
   url: string;
   mp4?: string;
   height?: number;
+  size?: number;
 };
 
 export interface GiphyUser {
@@ -109,6 +110,14 @@ export enum ImageTypes {
   FixedWidthSmallStill = "fixed_width_small_still",
   FixedWidthStill = "fixed_width_still",
 }
+
+export const SupportedImageTypes: ImageTypes[] = [
+  ImageTypes.Original,
+  ImageTypes.Downsized,
+  ImageTypes.FixedHeight,
+  ImageTypes.FixedWidth,
+  ImageTypes.OriginialStill,
+];
 
 export enum SearchTypes {
   Search = "search",

@@ -63,5 +63,5 @@ triggering hotreload. Yalc avoids issues with react-hooks that are typical when 
 
 ### About build & watch
 
-This plugin uses [@sanity/plugin-sdk](https://github.com/sanity-io/plugin-sdk)
+This plugin uses [@sanity/plugin-kit](https://github.com/sanity-io/plugin-kit)
 with default configuration for build & watch scripts.

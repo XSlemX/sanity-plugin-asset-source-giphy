@@ -104,7 +104,7 @@ const BigContainer = styled.div`
   justify-content: center;
 `;
 const BigVideo = styled.video<{ previewHeight: number }>`
-  width: 500px;
+  width: auto;
   height: ${(props) => props?.previewHeight ?? 272}px;
   object-fit: cover;
 `;
