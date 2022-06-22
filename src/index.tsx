@@ -16,7 +16,7 @@ export const giphyAssetSourcePlugin = createPlugin<GiphyAssetSourceConfig>(
       name: "asset-source-giphy",
       form: {
         image: {
-          assetSources: (prev) => {
+          assetSources: (prev, ctx) => {
             return [
               ...prev,
               {

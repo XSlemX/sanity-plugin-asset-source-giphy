@@ -1,10 +1,10 @@
 import React from "react";
 import {
   Badge,
+  BadgeTone,
   Box,
   Dialog,
   Flex,
-  Grid,
   Heading,
   Spinner,
   Text,
@@ -43,7 +43,7 @@ const DialogHeader = ({ item }: DialogHeaderProps) => {
       </Heading>
       <Spacer />
       {item?.user?.is_verified && <Verified />}
-      <Badge tone={tone}>{item?.rating}</Badge>
+      <Badge tone={tone as BadgeTone}>{item?.rating}</Badge>
     </Flex>
   );
 };
@@ -58,10 +58,6 @@ const GiphyById = ({ onClose }: SelectedItemDialogProps) => {
       enabled: !!selectedGifId,
     }
   );
-
-  if (isLoading) {
-    return <Spinner muted />;
-  }
 
   return (
     <Dialog
@@ -79,15 +75,21 @@ const GiphyById = ({ onClose }: SelectedItemDialogProps) => {
           gap={5}
           width={1}
         >
-          <Grid columns={2} width={1}>
-            <VideoPreview
-              autoPlay
-              src={data?.images.original.mp4!}
-              type={"preview"}
-              previewHeight={data?.images.original.height}
-            />
-            <ImageSelectOptions data={data!} />
-          </Grid>
+          {isLoading ? (
+            <Spinner muted />
+          ) : (
+            <Flex wrap={"wrap"} width={1} justify={"center"} gap={2}>
+              <VideoPreview
+                autoPlay
+                src={data?.images.original.mp4!}
+                type={"mp4"}
+                showUserTooltip={false}
+                height={data?.images.original.height!}
+                width={data?.images.original.width!}
+              />
+              <ImageSelectOptions data={data!} />
+            </Flex>
+          )}
           <RelatedGifs />
         </Flex>
       </Box>

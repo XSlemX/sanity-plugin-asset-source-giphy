@@ -1,7 +1,8 @@
 export type GiphyImageItem = {
   url: string;
   mp4?: string;
-  height?: number;
+  height: number;
+  width: number;
   size?: number;
 };
 
@@ -138,5 +139,6 @@ export enum Tone {
   primary = "primary",
   caution = "caution",
   critical = "critical",
+  brand = "brand",
   default = "default",
 }

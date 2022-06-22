@@ -6,11 +6,14 @@ import Verified from "./Verified";
 import { GiphyUserImage } from "./shared.styled";
 
 interface VideoPreviewProps {
-  src: string;
+  src?: string;
+  title?: string;
   autoPlay?: boolean;
-  type: "tile" | "preview";
+  showUserTooltip?: boolean;
+  type: "webd" | "mp4";
   onClick?: () => void;
-  previewHeight?: number;
+  height: number;
+  width: number;
   user?: GiphyUser;
 }
 
@@ -34,36 +37,39 @@ function VideoTooltip({ user }: VideoToolTipProps) {
 
 export default function VideoPreview({
   src,
+  title,
   type,
   onClick,
   user,
-  previewHeight = 272,
+  height,
+  width,
   autoPlay = true,
+  showUserTooltip = true,
 }: VideoPreviewProps) {
   if (!src) {
+    console.log("Received no url", title);
     return null;
   }
 
-  if (type === "preview") {
-    return (
-      <BigContainer>
-        <BigVideo
-          src={src}
-          autoPlay={autoPlay}
-          loop
-          previewHeight={previewHeight}
-        />
-      </BigContainer>
-    );
-  }
-
+  const minWidth = Math.max(width, 248);
+  const mHeight = (height / width) * minWidth;
   return (
-    <SmallContainer>
-      <SmallVideo onClick={onClick} src={src} autoPlay={autoPlay} loop />
-      <Hover>
-        <VideoTooltip user={user!} />
-      </Hover>
-    </SmallContainer>
+    <Container width={minWidth} height={mHeight}>
+      {/*<SmallVideo onClick={onClick} src={src} autoPlay={autoPlay} loop />*/}
+      {type === "webd" && (
+        <picture onClick={onClick}>
+          <source type="image/webp" srcSet={src} />
+          <Tile alt={title} src={src} width={minWidth} />
+        </picture>
+      )}
+      {type === "mp4" && <video loop autoPlay src={src} />}
+
+      {showUserTooltip && (
+        <Hover>
+          <VideoTooltip user={user!} />
+        </Hover>
+      )}
+    </Container>
   );
 }
 
@@ -81,8 +87,9 @@ const Hover = styled.div`
   justify-content: flex-start;
 `;
 
-const SmallContainer = styled.div`
-  width: 300px;
+const Container = styled.div<{ width: number; height: number }>`
+  width: ${(props) => props.width}px;
+  height: ${(props) => props.height}px;
   position: relative;
 
   &:hover ${Hover} {
@@ -98,13 +105,25 @@ const SmallVideo = styled.video`
   object-fit: cover;
 `;
 
+const Tile = styled.img`
+  border-radius: 4px;
+  width: 248px;
+  height: auto;
+  object-fit: cover;
+`;
+
 const BigContainer = styled.div`
-  width: 100%;
   display: flex;
   justify-content: center;
 `;
 const BigVideo = styled.video<{ previewHeight: number }>`
   width: auto;
-  height: ${(props) => props?.previewHeight ?? 272}px;
+  height: ${(props) => props.previewHeight}px;
+  object-fit: cover;
+`;
+
+const Preview = styled.img<{ previewHeight: number }>`
+  width: auto;
+  height: ${(props) => props.previewHeight}px;
   object-fit: cover;
 `;

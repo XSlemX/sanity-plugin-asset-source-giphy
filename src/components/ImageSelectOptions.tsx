@@ -5,7 +5,6 @@ import {
   GiphyResult,
   ImageTypes,
   SupportedImageTypes,
-  Tone,
 } from "../types";
 import { useGiphyContext } from "../context/GiphyProvider";
 import prettyBytes from "pretty-bytes";
@@ -15,10 +14,18 @@ const formatImageLabel = (name: string) =>
     .substring(1)
     .replaceAll("_", " ")}`;
 
+const colors = ["#fff35c", "#00ccff", "#9934ff", "#ff6667", "#08ff99"];
+function getColor(index: number, offset: number) {
+  return colors[
+    (colors.length + index + (offset % colors.length)) % colors.length
+  ];
+}
 type Entry = GiphyImageItem & {
   key: string;
   isStill: Boolean;
-  sizeText: string;
+  text: string;
+  backgroundColor: string;
+  color: string;
 };
 type ImageSelectOptionsProps = {
   data: GiphyResult;
@@ -33,12 +40,16 @@ const ImageSelectOptions = ({ data }: ImageSelectOptionsProps) => {
       .filter(([key, value]) => {
         return SupportedImageTypes.includes(key as ImageTypes);
       })
-      .map(([key, value]) => {
+      .map(([key, value], index) => {
+        const size = prettyBytes(parseInt(value.size?.toString() ?? "0", 10));
+        console.log("size", size, "valuesize", value.size);
         return {
           ...value,
           key,
           isStill: key.includes("still"),
-          sizeText: prettyBytes(parseInt(value.size?.toString() ?? "0", 10)),
+          text: `${formatImageLabel(key)} (${size})`,
+          backgroundColor: getColor(index, 0),
+          color: getColor(index, 4),
         };
       })
       .sort((a, b) => {
@@ -52,16 +63,22 @@ const ImageSelectOptions = ({ data }: ImageSelectOptionsProps) => {
       });
   }, [data]);
   return (
-    <Flex direction={"column"} gap={2} align={"center"} justify={"center"}>
+    <Flex direction={"column"} gap={2}>
       <Heading type={"h3"}>Download options</Heading>
-      {entries?.map((image) => (
-        <Button
-          width={1}
-          onClick={() => handleSelect(data, image.key as ImageTypes)}
-          mode="default"
-          tone={image.isStill ? Tone.primary : Tone.positive}
-          text={`${formatImageLabel(image.key)} (${image.sizeText})`}
-        />
+      {entries?.map((entry) => (
+        <button
+          onClick={() => handleSelect(data, entry.key as ImageTypes)}
+          style={{
+            backgroundColor: entry.backgroundColor,
+            color: entry.color,
+            width: 200,
+            height: 48,
+            borderRadius: 4,
+            fontSize: "1rem",
+          }}
+        >
+          <span>{entry.text}</span>
+        </button>
       ))}
     </Flex>
   );
