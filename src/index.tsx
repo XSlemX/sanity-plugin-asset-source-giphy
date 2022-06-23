@@ -24,7 +24,6 @@ export const giphyAssetSourcePlugin = createPlugin<GiphyAssetSourceConfig>(
                 component: function component(
                   props: AssetSourceComponentProps
                 ) {
-                  console.log(props);
                   return (
                     <QueryClientProvider client={queryClient}>
                       <Giphy {...props} {...config} />;

@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import VideoPreview from "./VideoPreview";
 import { GiphyResult, RelatedGif } from "../types";
-import { useGiphyContext } from "../context/GiphyProvider";
 import Masonry from "./Masonry";
 import styled from "styled-components";
 
@@ -40,13 +39,21 @@ const GifGrid = ({ items, onItemClick }: GifGridProps) => {
   );
 
   useEffect(() => {
+    let localRef: React.MutableRefObject<Element | null> = {
+      current: null,
+    };
     if (container.current) {
       observer.current.observe(container.current);
+      localRef.current = container.current as Element;
     }
 
-    return () => {
-      observer.current.unobserve(container.current!);
-    };
+    // Workaround to allow unobserve of already cleaned up dom element.
+    if (container.current)
+      return () => {
+        if (localRef.current) {
+          observer.current.unobserve(localRef.current!);
+        }
+      };
   }, [container, observer]);
 
   // This hacky guy is to reduce the breakpoints cause brick is using window width
