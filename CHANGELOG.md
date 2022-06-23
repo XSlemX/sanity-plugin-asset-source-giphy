@@ -1,3 +1,10 @@
+## [4.0.1](https://github.com/XSlemX/sanity-plugin-asset-source-giphy/compare/v4.0.0...v4.0.1) (2022-06-23)
+
+
+### Bug Fixes
+
+* lib inside src should not be ignored ([520e474](https://github.com/XSlemX/sanity-plugin-asset-source-giphy/commit/520e4740949b2f08e31b9b00ea0964c820a14ccc))
+
 # [4.0.0](https://github.com/XSlemX/sanity-plugin-asset-source-giphy/compare/v3.1.0...v4.0.0) (2022-06-23)
 
 
