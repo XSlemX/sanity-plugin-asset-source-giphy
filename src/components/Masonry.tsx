@@ -1,6 +1,6 @@
 // Taken from https://github.com/sergiop/react-giphy-searchbox/blob/master/src/components/MasonryLayout/MasonryLayout.js
 
-import React, { useRef, useEffect, Children } from "react";
+import React, { Children, useEffect, useRef } from "react";
 import Bricks, { SizeDetail } from "bricks.js";
 
 type Props = {

@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Button, Flex, Heading } from "@sanity/ui";
+import { Flex, Heading } from "@sanity/ui";
 import {
   GiphyImageItem,
   GiphyResult,
@@ -42,14 +42,13 @@ const ImageSelectOptions = ({ data }: ImageSelectOptionsProps) => {
       })
       .map(([key, value], index) => {
         const size = prettyBytes(parseInt(value.size?.toString() ?? "0", 10));
-        console.log("size", size, "valuesize", value.size);
         return {
           ...value,
           key,
           isStill: key.includes("still"),
           text: `${formatImageLabel(key)} (${size})`,
           backgroundColor: getColor(index, 0),
-          color: getColor(index, 4),
+          color: "#000",
         };
       })
       .sort((a, b) => {
@@ -68,6 +67,7 @@ const ImageSelectOptions = ({ data }: ImageSelectOptionsProps) => {
       {entries?.map((entry) => (
         <button
           onClick={() => handleSelect(data, entry.key as ImageTypes)}
+          key={entry.key}
           style={{
             backgroundColor: entry.backgroundColor,
             color: entry.color,

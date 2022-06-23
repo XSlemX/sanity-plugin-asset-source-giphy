@@ -27,7 +27,6 @@ const sizeConfig = [
 ];
 
 const GifGrid = ({ items, onItemClick }: GifGridProps) => {
-  const { shouldAutoPlayPreview } = useGiphyContext();
   const container = useRef(null);
   const [ratio, setRatio] = useState<number>(1);
 
@@ -74,7 +73,6 @@ const GifGrid = ({ items, onItemClick }: GifGridProps) => {
             onClick={() => onItemClick(result.id)}
             key={result.id}
             user={result.user}
-            autoPlay={shouldAutoPlayPreview}
           />
         ))}
       </Masonry>

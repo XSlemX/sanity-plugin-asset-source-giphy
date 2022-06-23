@@ -20,7 +20,6 @@ type GiphyContextProps = {
   handleRatingChange: (rating: GiphyRating) => void;
   handleGifClick: (gifId: string) => void;
   handleSelect: (item: GiphyResult, image: ImageTypes) => void;
-  shouldAutoPlayPreview: boolean;
 };
 
 const Context = createContext<GiphyContextProps>({
@@ -28,7 +27,6 @@ const Context = createContext<GiphyContextProps>({
   selectedRating: GiphyRating.G,
   selectedSearchType: SearchTypes.Trending,
   apiKey: "",
-  shouldAutoPlayPreview: false,
   handleSearch: (term: string) => {},
   handleGifClick: (gifId: string) => {},
   handleRandomClick: () => {},
@@ -41,15 +39,18 @@ type GiphyProviderProps = {
   children: React.ReactNode;
   apiKey: string;
   onSelect: (assetFromSource: AssetFromSource[]) => void;
-  shouldAutoPlayPreview: boolean;
+  previouslySelectedGifId?: string | null;
 };
 const GiphyProvider = ({
   children,
   apiKey,
   onSelect,
-  shouldAutoPlayPreview,
+  previouslySelectedGifId,
 }: GiphyProviderProps) => {
-  const [selectedGifId, setSelectedGifId] = React.useState<string | null>(null);
+  console.log("Prev", previouslySelectedGifId);
+  const [selectedGifId, setSelectedGifId] = React.useState<string | null>(
+    previouslySelectedGifId ?? null
+  );
   const [selectedRating, setSelectedRating] = React.useState<GiphyRating>(
     GiphyRating.G
   );
@@ -103,10 +104,21 @@ const GiphyProvider = ({
       return;
     }
 
+    const giphy = item.images[image];
+
     onSelect([
       {
         kind: "url",
-        value: item.images[image].url,
+        value: giphy.url,
+        // @ts-ignore
+        assetDocumentProps: {
+          _id: item.id,
+          source: {
+            id: item.id,
+            name: item.title,
+            url: item.url,
+          },
+        },
       },
     ]);
   };
@@ -126,7 +138,6 @@ const GiphyProvider = ({
         items: data,
         error,
         isLoading,
-        shouldAutoPlayPreview,
         handleSelect,
       }}
     >

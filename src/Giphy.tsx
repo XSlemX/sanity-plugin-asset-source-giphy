@@ -14,9 +14,11 @@ export default function Giphy({
   onClose,
   onSelect,
   apiKey,
-  shouldAutoPlayPreview = false,
+  selectedAssets,
 }: GiphySelectorProps) {
-  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [dialogOpen, setDialogOpen] = useState<boolean>(
+    !!selectedAssets?.[0]?.source?.id
+  );
   const onDialogClose = useCallback(() => {
     setDialogOpen(false);
   }, []);
@@ -31,7 +33,7 @@ export default function Giphy({
       <GiphyProvider
         apiKey={apiKey}
         onSelect={onSelect}
-        shouldAutoPlayPreview={shouldAutoPlayPreview}
+        previouslySelectedGifId={selectedAssets?.[0]?.source?.id}
       >
         <Dialog
           width={200}

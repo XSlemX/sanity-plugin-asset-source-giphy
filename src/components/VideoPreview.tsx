@@ -8,7 +8,6 @@ import { GiphyUserImage } from "./shared.styled";
 interface VideoPreviewProps {
   src?: string;
   title?: string;
-  autoPlay?: boolean;
   showUserTooltip?: boolean;
   type: "webd" | "mp4";
   onClick?: () => void;
@@ -43,7 +42,6 @@ export default function VideoPreview({
   user,
   height,
   width,
-  autoPlay = true,
   showUserTooltip = true,
 }: VideoPreviewProps) {
   if (!src) {
@@ -51,19 +49,17 @@ export default function VideoPreview({
     return null;
   }
 
-  const minWidth = Math.max(width, 248);
+  const minWidth = Math.max(width, type === "webd" ? 248 : 480);
   const mHeight = (height / width) * minWidth;
   return (
     <Container width={minWidth} height={mHeight}>
-      {/*<SmallVideo onClick={onClick} src={src} autoPlay={autoPlay} loop />*/}
       {type === "webd" && (
         <picture onClick={onClick}>
           <source type="image/webp" srcSet={src} />
           <Tile alt={title} src={src} width={minWidth} />
         </picture>
       )}
-      {type === "mp4" && <video loop autoPlay src={src} />}
-
+      {type === "mp4" && <Video loop autoPlay src={src} />}
       {showUserTooltip && (
         <Hover>
           <VideoTooltip user={user!} />
@@ -86,7 +82,6 @@ const Hover = styled.div`
   align-items: center;
   justify-content: flex-start;
 `;
-
 const Container = styled.div<{ width: number; height: number }>`
   width: ${(props) => props.width}px;
   height: ${(props) => props.height}px;
@@ -97,33 +92,12 @@ const Container = styled.div<{ width: number; height: number }>`
   }
 }
 `;
-
-const SmallVideo = styled.video`
-  border-radius: 4px;
-  width: 300px;
-  height: 200px;
-  object-fit: cover;
-`;
-
 const Tile = styled.img`
   border-radius: 4px;
   width: 248px;
   height: auto;
   object-fit: cover;
 `;
-
-const BigContainer = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-const BigVideo = styled.video<{ previewHeight: number }>`
-  width: auto;
-  height: ${(props) => props.previewHeight}px;
-  object-fit: cover;
-`;
-
-const Preview = styled.img<{ previewHeight: number }>`
-  width: auto;
-  height: ${(props) => props.previewHeight}px;
-  object-fit: cover;
+const Video = styled.video`
+  width: 100%;
 `;

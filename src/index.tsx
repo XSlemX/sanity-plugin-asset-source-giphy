@@ -5,7 +5,6 @@ import Icon from "./Icon";
 
 export interface GiphyAssetSourceConfig {
   apiKey: string;
-  shouldAutoPlayPreview?: boolean;
 }
 
 const queryClient = new QueryClient({});
@@ -25,6 +24,7 @@ export const giphyAssetSourcePlugin = createPlugin<GiphyAssetSourceConfig>(
                 component: function component(
                   props: AssetSourceComponentProps
                 ) {
+                  console.log(props);
                   return (
                     <QueryClientProvider client={queryClient}>
                       <Giphy {...props} {...config} />;

@@ -1,5 +1,5 @@
 import React from "react";
-import { Flex, Spinner, Stack } from "@sanity/ui";
+import { Flex, Spinner } from "@sanity/ui";
 import GifGrid from "./GifGrid";
 import { useGiphyContext } from "../context/GiphyProvider";
 import GiphyStatusText from "./GiphyStatusText";

@@ -80,7 +80,6 @@ const GiphyById = ({ onClose }: SelectedItemDialogProps) => {
           ) : (
             <Flex wrap={"wrap"} width={1} justify={"center"} gap={2}>
               <VideoPreview
-                autoPlay
                 src={data?.images.original.mp4!}
                 type={"mp4"}
                 showUserTooltip={false}
