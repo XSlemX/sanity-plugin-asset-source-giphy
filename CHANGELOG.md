@@ -1,3 +1,20 @@
+# [4.0.0](https://github.com/XSlemX/sanity-plugin-asset-source-giphy/compare/v3.1.0...v4.0.0) (2022-06-23)
+
+
+### Bug Fixes
+
+* fix ref to container removed before unobserve ([99af551](https://github.com/XSlemX/sanity-plugin-asset-source-giphy/commit/99af551189411046f988f52288d3726605180dca))
+
+
+### Features
+
+* remove should auto play config ([abca7b7](https://github.com/XSlemX/sanity-plugin-asset-source-giphy/commit/abca7b7320c1f080581a25820904ce6ee96c1549))
+
+
+### BREAKING CHANGES
+
+* removing it changes how this works. no deprecation grace period either
+
 # [3.1.0](https://github.com/XSlemX/sanity-plugin-asset-source-giphy/compare/v3.0.0...v3.1.0) (2022-06-22)
 
 
