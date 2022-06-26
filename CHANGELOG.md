@@ -1,3 +1,13 @@
+## [4.0.2](https://github.com/XSlemX/sanity-plugin-asset-source-giphy/compare/v4.0.1...v4.0.2) (2022-06-26)
+
+
+### Bug Fixes
+
+* allow to open current asset without closing giphy dialog ([9886b0a](https://github.com/XSlemX/sanity-plugin-asset-source-giphy/commit/9886b0ae7a0cce35821d6e59a86c3252e95cdeb8))
+* centering done ([b5f2272](https://github.com/XSlemX/sanity-plugin-asset-source-giphy/commit/b5f2272fa403255112d1c3023a994e70306840f2))
+* restructure to allow dialog to open dialog from anywhere ([6e1b032](https://github.com/XSlemX/sanity-plugin-asset-source-giphy/commit/6e1b032827e99eff9c61bc1883e121d37440a115))
+* style fixes. centering ([894b9bf](https://github.com/XSlemX/sanity-plugin-asset-source-giphy/commit/894b9bf8a531491bc4ba76fba680773d8466d1d5))
+
 ## [4.0.1](https://github.com/XSlemX/sanity-plugin-asset-source-giphy/compare/v4.0.0...v4.0.1) (2022-06-23)
 
 
