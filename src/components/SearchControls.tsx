@@ -10,7 +10,8 @@ import {
   TextInput,
 } from "@sanity/ui";
 import { useGiphyContext } from "../context/GiphyProvider";
-import { GiphyRating } from "../types";
+import { GiphyRating, ImageTypes } from "../types";
+import GiphyPreview from "./GiphyPreview";
 
 const SearchControls = () => {
   const input = useRef<HTMLInputElement>(null);
@@ -102,7 +103,14 @@ const SearchControls = () => {
               <Button
                 fontSize={[2, 2, 3]}
                 padding={[3, 3, 4]}
-                text="Open current asset"
+                text="Open current"
+                icon={
+                  <GiphyPreview
+                    gifId={previouslySelectedGifId}
+                    type={ImageTypes.PreviewGif}
+                    maxHeight={30}
+                  />
+                }
                 tone="primary"
                 mode={"bleed"}
                 onClick={handleCurrentAssetClick}
