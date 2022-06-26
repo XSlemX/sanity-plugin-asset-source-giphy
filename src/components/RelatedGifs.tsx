@@ -5,6 +5,7 @@ import { getRelatedGifs } from "../lib/giphyClient";
 import { Flex, Heading, Spinner } from "@sanity/ui";
 import GifGrid from "./GifGrid";
 import { useGiphyContext } from "../context/GiphyProvider";
+import { Flex100Center } from "./shared.styled";
 
 type RelatedGifsProps = {};
 
@@ -23,10 +24,15 @@ const RelatedGifs = ({}: RelatedGifsProps) => {
   }
 
   return (
-    <Flex direction={"column"} gap={5}>
+    <Flex100Center
+      gap={5}
+      justify={"center"}
+      align={"center"}
+      direction={"column"}
+    >
       <Heading type={"h3"}>Related Gifs</Heading>
       <GifGrid items={data!} onItemClick={handleGifClick} />
-    </Flex>
+    </Flex100Center>
   );
 };
 

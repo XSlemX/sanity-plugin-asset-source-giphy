@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Flex } from "@sanity/ui";
 
 export const GiphyUserImage = styled.img`
   height: 32px;
@@ -8,4 +9,8 @@ export const GiphyUserImage = styled.img`
 
 export const Spacer = styled.div`
   flex-grow: 1;
+`;
+
+export const Flex100Center = styled(Flex)`
+  width: 100%;
 `;

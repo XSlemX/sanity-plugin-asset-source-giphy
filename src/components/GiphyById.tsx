@@ -78,7 +78,7 @@ const GiphyById = ({ onClose }: SelectedItemDialogProps) => {
           {isLoading ? (
             <Spinner muted />
           ) : (
-            <Flex wrap={"wrap"} width={1} justify={"center"} gap={2}>
+            <Flex wrap={"wrap"} width={1} justify={"center"} gap={5}>
               <VideoPreview
                 src={data?.images.original.mp4!}
                 type={"mp4"}

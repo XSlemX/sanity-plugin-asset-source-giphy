@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import VideoPreview from "./VideoPreview";
 import { GiphyResult, RelatedGif } from "../types";
 import Masonry from "./Masonry";
-import styled from "styled-components";
+import { Flex100Center } from "./shared.styled";
 
 type GifGridProps = {
   items: GiphyResult[] | RelatedGif[];
@@ -68,7 +68,7 @@ const GifGrid = ({ items, onItemClick }: GifGridProps) => {
     [ratio]
   );
   return (
-    <Container ref={container}>
+    <Flex100Center align={"center"} justify={"center"} ref={container}>
       <Masonry sizes={sizes}>
         {items?.map((result) => (
           <VideoPreview
@@ -83,15 +83,8 @@ const GifGrid = ({ items, onItemClick }: GifGridProps) => {
           />
         ))}
       </Masonry>
-    </Container>
+    </Flex100Center>
   );
 };
-
-const Container = styled.div`
-  width: 100%;
-  position: relative;
-  display: flex;
-  justify-content: center;
-`;
 
 export default GifGrid;

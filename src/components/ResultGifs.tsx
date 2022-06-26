@@ -4,6 +4,7 @@ import GifGrid from "./GifGrid";
 import { useGiphyContext } from "../context/GiphyProvider";
 import GiphyStatusText from "./GiphyStatusText";
 import styled from "styled-components";
+import { Flex100Center } from "./shared.styled";
 
 type ResultGifsProps = {
   onItemClick: (id: string) => void;
@@ -18,16 +19,19 @@ const ResultGifs = ({ onItemClick }: ResultGifsProps) => {
   };
 
   return (
-    <Flex direction={"column"} align={"center"} gap={5} width={"100%"}>
+    <Flex100Center
+      direction={"column"}
+      align={"center"}
+      justify={"center"}
+      gap={5}
+    >
       <GiphyStatusText />
-      <ResultGifsContainer>
-        {isLoading ? (
-          <Spinner muted />
-        ) : (
-          <GifGrid items={items!} onItemClick={handleItemClick} />
-        )}
-      </ResultGifsContainer>
-    </Flex>
+      {isLoading ? (
+        <Spinner muted />
+      ) : (
+        <GifGrid items={items!} onItemClick={handleItemClick} />
+      )}
+    </Flex100Center>
   );
 };
 
