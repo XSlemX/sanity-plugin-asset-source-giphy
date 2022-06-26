@@ -145,6 +145,7 @@ const GiphyProvider = ({
         selectedSearchType,
         apiKey,
         items: data,
+        searchTerm,
         error,
         isLoading,
         previouslySelectedGifId,

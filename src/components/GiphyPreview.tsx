@@ -11,7 +11,7 @@ type GiphyPreviewProps = {
 
 const GiphyPreview = ({ gifId, type, maxHeight = 40 }: GiphyPreviewProps) => {
   const { apiKey } = useGiphyContext();
-  const { data, error, isLoading } = useQuery<GiphyResult, any>(
+  const { data } = useQuery<GiphyResult, any>(
     ["giphy_preview", gifId],
     () => getById(gifId, apiKey),
     {
