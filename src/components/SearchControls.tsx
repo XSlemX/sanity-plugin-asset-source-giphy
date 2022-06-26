@@ -20,12 +20,19 @@ const SearchControls = () => {
     handleRandomClick,
     selectedRating,
     handleRatingChange,
+    handleGifClick,
+    previouslySelectedGifId,
   } = useGiphyContext();
   useEffect(() => {
     if (input.current) {
       input.current.focus();
     }
   }, [input]);
+
+  function handleCurrentAssetClick() {
+    handleGifClick(previouslySelectedGifId!);
+  }
+
   return (
     <Card padding={4}>
       <Stack space={4}>
@@ -91,6 +98,16 @@ const SearchControls = () => {
               tone="primary"
               onClick={handleRandomClick}
             />
+            {previouslySelectedGifId && (
+              <Button
+                fontSize={[2, 2, 3]}
+                padding={[3, 3, 4]}
+                text="Open current asset"
+                tone="primary"
+                mode={"bleed"}
+                onClick={handleCurrentAssetClick}
+              />
+            )}
           </Inline>
         </Card>
       </Stack>

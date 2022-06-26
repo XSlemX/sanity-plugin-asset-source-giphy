@@ -18,8 +18,10 @@ type GiphyContextProps = {
   handleRandomClick: () => void;
   handleTrendingClick: () => void;
   handleRatingChange: (rating: GiphyRating) => void;
-  handleGifClick: (gifId: string) => void;
+  handleGifClick: (gifId: string | undefined) => void;
   handleSelect: (item: GiphyResult, image: ImageTypes) => void;
+  previouslySelectedGifId?: string;
+  handleClose?: () => void;
 };
 
 const Context = createContext<GiphyContextProps>({
@@ -28,7 +30,7 @@ const Context = createContext<GiphyContextProps>({
   selectedSearchType: SearchTypes.Trending,
   apiKey: "",
   handleSearch: (term: string) => {},
-  handleGifClick: (gifId: string) => {},
+  handleGifClick: (gifId: string | undefined) => {},
   handleRandomClick: () => {},
   handleRatingChange: (rating: GiphyRating) => {},
   handleTrendingClick: () => {},
@@ -39,17 +41,19 @@ type GiphyProviderProps = {
   children: React.ReactNode;
   apiKey: string;
   onSelect: (assetFromSource: AssetFromSource[]) => void;
-  previouslySelectedGifId?: string | null;
+  onClose: () => void;
+  previouslySelectedGifId?: string | undefined;
 };
 const GiphyProvider = ({
   children,
   apiKey,
   onSelect,
+  onClose,
   previouslySelectedGifId,
 }: GiphyProviderProps) => {
   console.log("Prev", previouslySelectedGifId);
-  const [selectedGifId, setSelectedGifId] = React.useState<string | null>(
-    previouslySelectedGifId ?? null
+  const [selectedGifId, setSelectedGifId] = React.useState<string | undefined>(
+    previouslySelectedGifId
   );
   const [selectedRating, setSelectedRating] = React.useState<GiphyRating>(
     GiphyRating.G
@@ -90,8 +94,13 @@ const GiphyProvider = ({
     setSelectedRating(rating);
   };
 
-  const handleGifClick = (gifId: string) => {
+  const handleGifClick = (gifId: string | undefined) => {
     setSelectedGifId(gifId);
+  };
+
+  const handleClose = () => {
+    setSelectedGifId(undefined);
+    onClose();
   };
 
   const handleSelect = (
@@ -126,11 +135,13 @@ const GiphyProvider = ({
   return (
     <Context.Provider
       value={{
+        handleClose,
         handleSearch,
         handleGifClick,
         handleRandomClick,
         handleTrendingClick,
         handleRatingChange,
+        handleSelect,
         selectedRating,
         selectedGifId,
         selectedSearchType,
@@ -138,7 +149,7 @@ const GiphyProvider = ({
         items: data,
         error,
         isLoading,
-        handleSelect,
+        previouslySelectedGifId,
       }}
     >
       {children}

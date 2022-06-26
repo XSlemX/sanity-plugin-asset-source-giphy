@@ -1,51 +1,43 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Container, Dialog, studioTheme, ThemeProvider } from "@sanity/ui";
 import { GiphyAssetSourceConfig } from ".";
 import NoApiKeyWarning from "./NoApiKeyWarning";
 import { AssetSourceComponentProps } from "sanity";
 import GiphyById from "./components/GiphyById";
 import SearchControls from "./components/SearchControls";
-import GiphyProvider from "./context/GiphyProvider";
+import { useGiphyContext } from "./context/GiphyProvider";
 import ResultGifs from "./components/ResultGifs";
 
-type GiphySelectorProps = GiphyAssetSourceConfig & AssetSourceComponentProps;
-
-export default function Giphy({
-  onClose,
-  onSelect,
-  apiKey,
-  selectedAssets,
-}: GiphySelectorProps) {
-  const [dialogOpen, setDialogOpen] = useState<boolean>(
-    !!selectedAssets?.[0]?.source?.id
-  );
+export default function Giphy() {
+  const { selectedGifId, apiKey, handleClose, handleGifClick } =
+    useGiphyContext();
+  const [dialogOpen, setDialogOpen] = useState<boolean>(!!selectedGifId);
   const onDialogClose = useCallback(() => {
+    handleGifClick(undefined);
     setDialogOpen(false);
   }, []);
   const onDialogOpen = useCallback(() => setDialogOpen(true), []);
+
+  useEffect(() => {
+    if (selectedGifId && !dialogOpen) {
+      setDialogOpen(true);
+    }
+  }, [selectedGifId, dialogOpen]);
 
   if (!apiKey) {
     return <NoApiKeyWarning />;
   }
 
   return (
-    <ThemeProvider theme={studioTheme}>
-      <GiphyProvider
-        apiKey={apiKey}
-        onSelect={onSelect}
-        previouslySelectedGifId={selectedAssets?.[0]?.source?.id}
-      >
-        <Dialog
-          width={200}
-          header={"Giphy Image Asset Source"}
-          onClose={onClose}
-          id={"giphy-dialog"}
-        >
-          <SearchControls />
-          <ResultGifs onItemClick={onDialogOpen} />
-          {dialogOpen && <GiphyById onClose={onDialogClose} />}
-        </Dialog>
-      </GiphyProvider>
-    </ThemeProvider>
+    <Dialog
+      width={200}
+      header={"Giphy Image Asset Source"}
+      onClose={handleClose}
+      id={"giphy-dialog"}
+    >
+      <SearchControls />
+      <ResultGifs onItemClick={onDialogOpen} />
+      {dialogOpen && <GiphyById onClose={onDialogClose} />}
+    </Dialog>
   );
 }
