@@ -16,7 +16,7 @@ const GiphyStatusText = () => {
         isLoading ? "Searching" : "Showing results"
       } for "${searchTerm}"`;
     }
-
+    console.log(useGiphyContext());
     return `${
       isLoading ? "Searching" : "Showing results"
     } for ${selectedSearchType}`;

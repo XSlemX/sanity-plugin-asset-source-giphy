@@ -51,7 +51,6 @@ const GiphyProvider = ({
   onClose,
   previouslySelectedGifId,
 }: GiphyProviderProps) => {
-  console.log("Prev", previouslySelectedGifId);
   const [selectedGifId, setSelectedGifId] = React.useState<string | undefined>(
     previouslySelectedGifId
   );
@@ -107,7 +106,6 @@ const GiphyProvider = ({
     item: GiphyResult,
     image: ImageTypes = ImageTypes.Original
   ) => {
-    console.log("Choosing", item, image);
     if (!(image in item.images)) {
       console.warn("No such image on this item", image);
       return;

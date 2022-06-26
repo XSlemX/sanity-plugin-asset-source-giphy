@@ -2,7 +2,6 @@ import { GiphyResult, ImageTypes } from "../types";
 import { useQuery } from "react-query";
 import { getById } from "../lib/giphyClient";
 import { useGiphyContext } from "../context/GiphyProvider";
-import { useState } from "react";
 
 type GiphyPreviewProps = {
   gifId: string;

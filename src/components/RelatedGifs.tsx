@@ -2,14 +2,12 @@ import React from "react";
 import { useQuery } from "react-query";
 import { RelatedGif } from "../types";
 import { getRelatedGifs } from "../lib/giphyClient";
-import { Flex, Heading, Spinner } from "@sanity/ui";
+import { Heading, Spinner } from "@sanity/ui";
 import GifGrid from "./GifGrid";
 import { useGiphyContext } from "../context/GiphyProvider";
 import { Flex100Center } from "./shared.styled";
 
-type RelatedGifsProps = {};
-
-const RelatedGifs = ({}: RelatedGifsProps) => {
+const RelatedGifs = () => {
   const { selectedGifId, apiKey, handleGifClick } = useGiphyContext();
   const { data, isLoading } = useQuery<RelatedGif[]>(
     [`related-${selectedGifId}`, "related"],
