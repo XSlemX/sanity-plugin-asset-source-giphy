@@ -90,6 +90,8 @@ const GifGrid = ({ items, onItemClick }: GifGridProps) => {
 const Container = styled.div`
   width: 100%;
   position: relative;
+  display: flex;
+  justify-content: center;
 `;
 
 export default GifGrid;

@@ -42,12 +42,8 @@ export default function Giphy({
           id={"giphy-dialog"}
         >
           <SearchControls />
-          <Container width={100} padding={4}>
-            <>
-              <ResultGifs onItemClick={onDialogOpen} />
-              {dialogOpen && <GiphyById onClose={onDialogClose} />}
-            </>
-          </Container>
+          <ResultGifs onItemClick={onDialogOpen} />
+          {dialogOpen && <GiphyById onClose={onDialogClose} />}
         </Dialog>
       </GiphyProvider>
     </ThemeProvider>
