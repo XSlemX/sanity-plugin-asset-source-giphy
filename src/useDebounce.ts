@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 // TAKEN FROM HERE https://usehooks.com/useDebounce/
 
 // T is a generic type for value parameter, our case this will be string

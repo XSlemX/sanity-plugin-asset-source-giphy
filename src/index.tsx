@@ -1,11 +1,15 @@
+import { AssetSourceComponentProps, createPlugin } from "sanity";
+import { QueryClient, QueryClientProvider } from "react-query";
 import Giphy from "./Giphy";
 import Icon from "./Icon";
-import { AssetSourceComponentProps, createPlugin } from "sanity";
+import { studioTheme, ThemeProvider } from "@sanity/ui";
+import GiphyProvider from "./context/GiphyProvider";
 
 export interface GiphyAssetSourceConfig {
   apiKey: string;
-  shouldAutoPlayPreview?: boolean;
 }
+
+const queryClient = new QueryClient({});
 
 export const giphyAssetSourcePlugin = createPlugin<GiphyAssetSourceConfig>(
   (config) => {
@@ -22,7 +26,22 @@ export const giphyAssetSourcePlugin = createPlugin<GiphyAssetSourceConfig>(
                 component: function component(
                   props: AssetSourceComponentProps
                 ) {
-                  return <Giphy {...props} {...config} />;
+                  const { selectedAssets } = props;
+                  return (
+                    <QueryClientProvider client={queryClient}>
+                      <ThemeProvider theme={studioTheme}>
+                        <GiphyProvider
+                          {...props}
+                          {...config}
+                          previouslySelectedGifId={
+                            selectedAssets?.[0]?.source?.id
+                          }
+                        >
+                          <Giphy />
+                        </GiphyProvider>
+                      </ThemeProvider>
+                    </QueryClientProvider>
+                  );
                 },
                 icon: Icon,
               },
