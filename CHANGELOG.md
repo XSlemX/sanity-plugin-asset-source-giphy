@@ -1,3 +1,10 @@
+## [4.0.3](https://github.com/XSlemX/sanity-plugin-asset-source-giphy/compare/v4.0.2...v4.0.3) (2022-06-27)
+
+
+### Bug Fixes
+
+* Expose search term in the provider. Remove unused props and logs ([76ef50c](https://github.com/XSlemX/sanity-plugin-asset-source-giphy/commit/76ef50cd5a5b8b0032ab01b53546701c55959e1c))
+
 ## [4.0.2](https://github.com/XSlemX/sanity-plugin-asset-source-giphy/compare/v4.0.1...v4.0.2) (2022-06-26)
 
 
