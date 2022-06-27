@@ -1,9 +1,8 @@
 import React from "react";
-import { Flex, Spinner } from "@sanity/ui";
+import { Spinner } from "@sanity/ui";
 import GifGrid from "./GifGrid";
 import { useGiphyContext } from "../context/GiphyProvider";
 import GiphyStatusText from "./GiphyStatusText";
-import styled from "styled-components";
 import { Flex100Center } from "./shared.styled";
 
 type ResultGifsProps = {
@@ -34,11 +33,5 @@ const ResultGifs = ({ onItemClick }: ResultGifsProps) => {
     </Flex100Center>
   );
 };
-
-const ResultGifsContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 100%;
-`;
 
 export default ResultGifs;

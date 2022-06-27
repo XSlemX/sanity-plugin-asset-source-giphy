@@ -2,7 +2,6 @@ import { GiphyResult, ImageTypes } from "../types";
 import { useQuery } from "react-query";
 import { getById } from "../lib/giphyClient";
 import { useGiphyContext } from "../context/GiphyProvider";
-import { useState } from "react";
 
 type GiphyPreviewProps = {
   gifId: string;
@@ -12,7 +11,7 @@ type GiphyPreviewProps = {
 
 const GiphyPreview = ({ gifId, type, maxHeight = 40 }: GiphyPreviewProps) => {
   const { apiKey } = useGiphyContext();
-  const { data, error, isLoading } = useQuery<GiphyResult, any>(
+  const { data } = useQuery<GiphyResult, any>(
     ["giphy_preview", gifId],
     () => getById(gifId, apiKey),
     {

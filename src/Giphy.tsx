@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Container, Dialog, studioTheme, ThemeProvider } from "@sanity/ui";
-import { GiphyAssetSourceConfig } from ".";
+import { Dialog } from "@sanity/ui";
 import NoApiKeyWarning from "./NoApiKeyWarning";
-import { AssetSourceComponentProps } from "sanity";
 import GiphyById from "./components/GiphyById";
 import SearchControls from "./components/SearchControls";
 import { useGiphyContext } from "./context/GiphyProvider";
